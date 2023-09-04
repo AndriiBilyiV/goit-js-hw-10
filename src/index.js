@@ -6,15 +6,15 @@ import 'slim-select/dist/slimselect.css';
 import Notiflix from 'notiflix';
 import './css/loader.css'
 
-const loaderTag = `<span class="loader"></span>`;
+const loaderTag = `<span class="load"></span>`;
 document.querySelector('body').insertAdjacentHTML('beforeend', loaderTag)
 
 const loader = document.querySelector('.loader');
+const load = document.querySelector('.load');
 const selectBox = document.querySelector('.breed-select');
 const thumb = document.querySelector('.cat-info');
 
-
-
+loader.style.display = 'none';
 selectBox.style.display = 'none';
 selectBox.style.marginBottom = "40px";
 thumb.style.display = 'none';
@@ -34,17 +34,18 @@ fetchBreeds().then(data => {
         boxValues += `<option value="${breed.id}">${breed.name}</option>`
         })
         selectBox.insertAdjacentHTML("afterbegin", boxValues);
-        loader.style.display = 'none';
+        load.style.display = 'none';
         selectBox.style.display = 'block'
         new SlimSelect({
             select: '#single'
         });
+         selectBox.style.overflow = 'scroll';
     })
     .catch(() => Notiflix.Notify.failure(errorText))
 
 selectBox.addEventListener('change', () => {
     thumb.style.display = 'none';
-    loader.style.display = 'block';
+    load.style.display = 'block';
     const currentBreed = selectBox.value;
     const breedInfo = breedsInfo.find(breed => breed.id === currentBreed);
     fetchCatByBreed(currentBreed)
@@ -57,7 +58,7 @@ selectBox.addEventListener('change', () => {
             const img = document.querySelector('.image');
             img.addEventListener('load', () => {
                 thumb.style.display = 'flex'
-                loader.style.display = 'none';
+                load.style.display = 'none';
             })
         })
         .catch( () => Notiflix.Notify.failure(errorText))
